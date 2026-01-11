@@ -1,4 +1,4 @@
-package com.in28minuts.rest.webservice.demo;
+package com.in28minuts.rest.webservice.demo.user;
 
 import java.net.URI;
 import java.util.List;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.in28minuts.rest.webservice.demo.exception.UserNotFoundException;
+
 import jakarta.validation.Valid;
 
 @RestController
@@ -50,5 +51,7 @@ public class UserResource {
                                 .toUri();
         return ResponseEntity.created(location).build();
     }
+
+    // response xml. Accept: application/xml in request
 
 }

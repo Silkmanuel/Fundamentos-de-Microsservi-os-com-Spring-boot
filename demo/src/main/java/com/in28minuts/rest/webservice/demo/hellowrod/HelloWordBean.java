@@ -1,4 +1,4 @@
-package com.in28minuts.rest.webservice.demo;
+package com.in28minuts.rest.webservice.demo.hellowrod;
 
 public class HelloWordBean {
     private String message;
