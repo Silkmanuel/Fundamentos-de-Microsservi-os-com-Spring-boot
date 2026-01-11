@@ -3,6 +3,9 @@ package com.in28minuts.rest.webservice.demo.user;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,13 +31,18 @@ public class UserResource {
         return service.findAll();
     }
 
+    // Implementing HEATEOAS
     @GetMapping("/users/{id}")
-    public User retrieveUserById(@PathVariable int id) {
+    public EntityModel<User> retrieveUserById(@PathVariable int id) {
         User user = service.findOne(id);
         if(user == null) {
             throw new UserNotFoundException("id-" + id);
         }
-        return user;
+        EntityModel<User> resource = EntityModel.of(user);
+        // Adding link to retrieveAllUsers
+        WebMvcLinkBuilder linkTo = linkTo(methodOn(this.getClass()).retrieveAllUsers());
+        resource.add(linkTo.withRel("all-users"));
+        return resource;
     }
 
     @DeleteMapping("/users/{id}")
