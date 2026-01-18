@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  naming-server:
+    image: silk/mmv2-naming-server:0.0.1-SNAPSHOT
+    ports:
+      - "8761:8761"
+
+  zipkin-server:
+    image: openzipkin/zipkin:3
+    ports:
+      - "9411:9411"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "9411"]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+
+  currency-exchange-service:
+    image: silk/mmv2-currency_exchange_service:0.0.1-SNAPSHOT
+    ports:
+      - "8000:8000"
+    depends_on:
+      zipkin-server:
+        condition: service_healthy
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://naming-server:8761/eureka
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin-server:9411/api/v2/spans
+
+  currency-conversion-service:
+    image: silk/mmv2-currency-conversion-service:0.0.1-SNAPSHOT
+    ports:
+      - "8100:8100"
+    depends_on:
+      - naming-server
+      - zipkin-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://naming-server:8761/eureka
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin-server:9411/api/v2/spans
+
+  api-gateway:
+    image: silk/mmv2-api-gatway:0.0.1-SNAPSHOT
+    ports:
+      - "8765:8765"
+    depends_on:
+      - naming-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://naming-server:8761/eureka
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin-server:9411/api/v2/spans
