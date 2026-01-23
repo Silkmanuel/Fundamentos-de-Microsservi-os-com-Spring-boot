@@ -5,16 +5,11 @@ kind: Deployment
 metadata:
   annotations:
     deployment.kubernetes.io/revision: "1"
-  creationTimestamp: "2026-01-23T18:20:59Z"
-  generation: 1
   labels:
     app: currency-exchange
   name: currency-exchange
   namespace: default
-  resourceVersion: "1769192470618799013"
-  uid: 07acaf77-555c-48ba-995b-c4bc703e1e5f
 spec:
-  progressDeadlineSeconds: 600
   replicas: 2
   revisionHistoryLimit: 10
   selector:
