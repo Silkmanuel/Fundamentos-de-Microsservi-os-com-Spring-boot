@@ -10,8 +10,8 @@
 	</parent>
 	<groupId>com.in28minutes.microservices</groupId>
 	<artifactId>currency_exchange_service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>currency_exchange_service</name>
+	<version>0.0.11-SNAPSHOT</version> <!-- CHANGE-KUBERNETES -->
+	<name>currency_exchange_service-kubernetes</name> <!-- CHANGE-KUBERNETES -->
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -44,34 +44,69 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- START CHANGE-KUBERNETES -->
+		<!-- <dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
-		</dependency>
-		
-		<!-- IMPLEMENTING FEIGN -->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
-		</dependency>
+		</dependency> -->
 
 		<!-- IMPLEMENTING EUREKA -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency> -->
+
+		<!-- IMPLEMENTING FEIGN -->
+		<!-- <dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency> -->
+
+		<!-- SB3 :  Micrometer 
+					> OpenTelemetry 
+					> Zipkin 
+		-->
+		<!-- <dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-observation</artifactId>
+		</dependency> -->
+
+		<!-- OPTION 1: Open Telemetry as Bridge (RECOMMENDED) -->
+		<!-- Open Telemetry 
+			- Simplified Observability (metrics, logs, and traces) -->
+
+		<!-- <dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-tracing-bridge-otel</artifactId>
+		</dependency> -->
+
+		<!-- <dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-exporter-zipkin</artifactId>
+		</dependency> -->
+		<!-- END SB3 :  Micrometer 
+					> OpenTelemetry 
+					> Zipkin 
+		-->
+		<!-- END CHANGE-KUBERNETES -->
+
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-tracing-bridge-brave</artifactId>
 		</dependency>
-
-
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -83,32 +118,6 @@
 			<artifactId>resilience4j-spring-boot2</artifactId>
 		</dependency>
 		
-		<!-- SB3 :  Micrometer 
-					> OpenTelemetry 
-					> Zipkin 
-		-->
-		<dependency>
-			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-observation</artifactId>
-		</dependency>
-
-		<!-- OPTION 1: Open Telemetry as Bridge (RECOMMENDED) -->
-		<!-- Open Telemetry 
-			- Simplified Observability (metrics, logs, and traces) -->
-
-		<dependency>
-			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-tracing-bridge-otel</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>io.opentelemetry</groupId>
-			<artifactId>opentelemetry-exporter-zipkin</artifactId>
-		</dependency>
-		<!-- END SB3 :  Micrometer 
-					> OpenTelemetry 
-					> Zipkin 
-		-->
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

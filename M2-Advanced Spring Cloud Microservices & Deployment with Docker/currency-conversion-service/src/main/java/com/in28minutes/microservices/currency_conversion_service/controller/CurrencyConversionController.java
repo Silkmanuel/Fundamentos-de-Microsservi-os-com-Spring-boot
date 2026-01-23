@@ -3,13 +3,14 @@ package com.in28minutes.microservices.currency_conversion_service.controller;
 import java.math.BigDecimal;
 import java.util.HashMap;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
+import org.slf4j.Logger;
 import com.in28minutes.microservices.currency_conversion_service.model.CurrencyConversion;
 import com.in28minutes.microservices.currency_conversion_service.proxy.CurrencyConversionProxy;
 
@@ -17,11 +18,13 @@ import com.in28minutes.microservices.currency_conversion_service.proxy.CurrencyC
 @RestController
 public class CurrencyConversionController {
 
-    @Autowired
-    CurrencyConversionProxy proxy;
+	private Logger logger = LoggerFactory.getLogger(CurrencyConversionController.class);
 
     @Autowired
-    private RestTemplate restTemplate;
+    CurrencyConversionProxy proxy;
+    // CHANGE KUBERNETES
+    // @Autowired
+    // private RestTemplate restTemplate;
 
     @GetMapping("/currency-conversion/from/{from}/to/{to}/quantity/{quantity}")
     public CurrencyConversion calculateCurrencyConversion(
@@ -29,10 +32,14 @@ public class CurrencyConversionController {
         @PathVariable("to") String to,
         @PathVariable("quantity") BigDecimal quantity
     ){
+
+		//CHANGE-KUBERNETES
+		logger.info("calculateCurrencyConversion called with {} to {} with {}", from, to, quantity);
+
         HashMap<String, String> uriVariables = new HashMap<>();
         uriVariables.put("from", from);
         uriVariables.put("to", to);
-        ResponseEntity<CurrencyConversion> responseEntity = restTemplate.getForEntity("http://localhost:8000/currency-exchange/from/{from}/to/{to}", CurrencyConversion.class, uriVariables);
+        ResponseEntity<CurrencyConversion> responseEntity = new RestTemplate().getForEntity("http://localhost:8000/currency-exchange/from/{from}/to/{to}", CurrencyConversion.class, uriVariables);
         CurrencyConversion currencyConversion = responseEntity.getBody();
         
         return new CurrencyConversion(
@@ -53,6 +60,10 @@ public class CurrencyConversionController {
         @PathVariable("to") String to,
         @PathVariable("quantity") BigDecimal quantity
     ){
+
+		//CHANGE-KUBERNETES
+		logger.info("calculateCurrencyConversionFeign called with {} to {} with {}", from, to, quantity);
+
         CurrencyConversion currency = proxy.retrieverExchangeValue(from, to);
         
         return new CurrencyConversion(

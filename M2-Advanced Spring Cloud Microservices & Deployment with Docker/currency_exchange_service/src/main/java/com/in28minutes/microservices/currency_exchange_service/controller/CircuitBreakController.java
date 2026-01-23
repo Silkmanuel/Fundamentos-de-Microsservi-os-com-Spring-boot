@@ -13,6 +13,7 @@ import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 
 @RestController
 public class CircuitBreakController {
+    
     private Logger logger = LoggerFactory.getLogger(CircuitBreakController.class);
 
     // IMPLEMENTING RETRY

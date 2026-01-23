@@ -1,0 +1,107 @@
+### DEPLOYMENT YAML
+### Mostra como o serviço é executado internamente no cluster
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: "2026-01-23T18:20:59Z"
+  generation: 1
+  labels:
+    app: currency-exchange
+  name: currency-exchange
+  namespace: default
+  resourceVersion: "1769192470618799013"
+  uid: 07acaf77-555c-48ba-995b-c4bc703e1e5f
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: currency-exchange
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: currency-exchange
+    spec:
+      containers:
+        - image: silkmanuel/mmv2-currency_exchange_service:0.0.11-SNAPSHOT
+          imagePullPolicy: IfNotPresent
+          name: mmv2-currency-exchange-service-skf54
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 1
+  conditions:
+    - lastTransitionTime: "2026-01-23T18:21:10Z"
+      lastUpdateTime: "2026-01-23T18:21:10Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2026-01-23T18:20:59Z"
+      lastUpdateTime: "2026-01-23T18:21:10Z"
+      message: ReplicaSet "currency-exchange-56777c5d89" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+  observedGeneration: 1
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1
+
+---
+###### SERVICE YML
+### Mostra como o serviço é exposto na rede
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/neg: '{"ingress":true}'
+  creationTimestamp: "2026-01-23T18:24:09Z"
+  finalizers:
+    - gke.networking.io/l4-netlb-v1
+    - service.kubernetes.io/load-balancer-cleanup
+  labels:
+    app: currency-exchange
+  name: currency-exchange
+  namespace: default
+  resourceVersion: "1769192685305167021"
+  uid: afef50c5-53d1-4e7d-9b81-3fb054d7ff3f
+spec:
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 34.118.236.10
+  clusterIPs:
+    - 34.118.236.10
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - nodePort: 31440
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
+  selector:
+    app: currency-exchange
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+      - ip: 136.116.173.164
+        ipMode: VIP

@@ -8,7 +8,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.in28minutes.microservices.currency_exchange_service.models.CurrencyExchange;
 import com.in28minutes.microservices.currency_exchange_service.repository.CurrencyExchangeRepository;
 
@@ -26,7 +25,7 @@ public class CurrencyExchangeController {
         @PathVariable String from,
         @PathVariable String to
     ){
-    System.out.println("=== Handled by port " + environment.getProperty("local.server.port"));
+        System.out.println("=== Handled by port " + environment.getProperty("local.server.port"));
         logger.info("== retrieve Exchange Value called {} to {} ", from, to);
         CurrencyExchange currencyExchange = repository.findByFromCurrencyAndToCurrency(from, to);
         if(currencyExchange== null){
@@ -34,7 +33,11 @@ public class CurrencyExchangeController {
           
         }
         String port = environment.getProperty("local.server.port");
-        currencyExchange.setEnvironment(port);
+		//CHANGE-KUBERNETES
+		String host = environment.getProperty("HOSTNAME");
+		String version = "v11";
+
+        currencyExchange.setEnvironment(port + " "+ version + " "+ host);
         return currencyExchange;
     }
 }
