@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.in28minutes.microservices</groupId>
 	<artifactId>currency_exchange_service</artifactId>
-	<version>0.0.11-SNAPSHOT</version> <!-- CHANGE-KUBERNETES -->
+	<version>0.0.12-SNAPSHOT</version> <!-- CHANGE-KUBERNETES -->
 	<name>currency_exchange_service-kubernetes</name> <!-- CHANGE-KUBERNETES -->
 	<description>Demo project for Spring Boot</description>
 	<url/>
@@ -138,7 +138,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<image>
-						<name>silk/mmv2-${project.artifactId}:${project.version}</name>
+						<name>silkmanuel/mmv2-${project.artifactId}:${project.version}</name>
 				        <env>
                 			<BP_JVM_VERSION>17.*</BP_JVM_VERSION>
             			</env>

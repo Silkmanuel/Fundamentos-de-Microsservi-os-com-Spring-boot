@@ -25,7 +25,7 @@ spec:
         app: currency-exchange
     spec:
       containers:
-        - image: silkmanuel/mmv2-currency_exchange_service:0.0.12-SNAPSHOT
+        - image: silkmanuel/mmv2-currency_exchange_service:0.0.11-SNAPSHOT
           imagePullPolicy: IfNotPresent
           name: mmv2-currency-exchange-service-skf54
       restartPolicy: Always
